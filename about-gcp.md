@@ -79,3 +79,62 @@ Project:
  - go to VPC Networks
  - crete vpc 
     -- address range: 10.0.0.0/16
+
+# Compute engine
+Lets run vm on google infra
+When creating Vm you specify service account thats bound to application rather than user
+
+## Machine type
+Set of virtualized hardware resources available to virtual machine instance including
+system memory size, virtual CPU count, persistent disk limits.
+
+ Types
+ - E  - narmal, used for day to day computing, cost efficient
+ - M - memory optimized
+ - N - general purpose
+ - C - compute optimized
+
+ # Cloud storage like S3
+Globally unified scalable and highly durable object storage for developers and enterprises.
+Provides StorageCloud for any Workload
+
+## Storage classes
+- Standard 
+Frequently accessed data
+- nearline
+low cost higly durable storage , frequently accessed data
+- coldline 
+similar to nearline, but when you acces data less frequently eg. once a quarter
+- archive
+lowest cost, backup, disaster ricover, accessed rarely
+
+## Exercices
+- go to cloud storage
+- create cloud bucket, should be globally unique,
+
+# Cloud SQL 
+It covers mysql, postgres, sql server engine
+Cloud spanner - glabally distributed db with unlimited space
+
+# NoSql
+BigTable - for analytical data
+Firestore -
+MemoryStore - in memory service for memcached and redis
+
+# BigQuery
+Serverless datawarehouse designed for business agility.
+
+# Google Dataflow
+managed service to run ApacheBeam pipelines withing GCP ecosystem.
+Uses PCollection - distributed collection 
+It automatically partitinos and distributes data across vms
+
+# PubSub
+managed real time messaging  service allows to send and receive messages between independent applications.
+
+# Monitoring resources in GCP
+ - go to monitoring dashboard - may merge few projects
+
+# Machine learning
+Tensorflow
+Opensource lib for ML
