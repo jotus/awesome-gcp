@@ -380,13 +380,64 @@ docker inspect service <service name >
 
 # Autoscaling
 # ------------------------------------------------
-- Horizontall scale Pods to increase capacity
+
+## Horizontall scale Pods to increase capacity
  HorizontalPodAutoscaler
 
-- VErtically - increse resources assigned to pods
+```
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoScaler
+metadata:
+  name: nginx-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx
+  minReplicas: 3
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 60
+```
+
+## VErtically - increse resources assigned to pods
 VErticalPodAutoscaller
+automatically recommends or applies CPU and RAM requests for pods
+more suited for stateful deployments
+cannot worg with horizontal pod autoscaler
 
-- scale cluster nodes when demands is high, extra VM are required
+## Cluster Autoscaler , adds new VM, scale cluster nodes when demands is high, extra VM are required
  Node-pool cluster autoscaling in GKE
+- nodes are added when pods dont have enough capacity to run
+- underutilized nodes automatically deleted
+- works best with node pools
+- group VM nodes of specific type together, eg. high CPU, high RAM
 
- 
+## Best Practices
+- CI/CD  on signle fixed node pool
+- web frontedn workloads on generic autoscaling node pool
+- RAM intensicve java apps in high RAM instance type node pool
+
+## Lab-8 - to exercise scaling
+
+Remarks
+When U edig node pool settings it will destroy and recreate your deployment, so make sure that workload is distributed.
+Edit node pool settings {click cluster tab, nodepools, and adjust limits}
+
+
+# --------------------------------------------------------------------------------------------
+# Helm
+
+- look for Artifact Hub for charts
+
+- install repo with desired manifests with name: bitnami
+helm repo add bitnami http://charts.bitnami.com/bitnami
+
+- example install:
+repo: bitnami
+> helm install my-wordpress  bitnami/wordpress
+helm applies templated manifest to cluster from your charts.
+
+Kubernetes yaml manifests implemented as go templates, allows dynamic use of configuration variables.
+
+> helm install  my-wordpress bitnami/wordpress -f values.yaml
+> helm status my-wordpress
