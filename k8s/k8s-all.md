@@ -426,6 +426,8 @@ Edit node pool settings {click cluster tab, nodepools, and adjust limits}
 
 # --------------------------------------------------------------------------------------------
 # Helm
+## Repository: 
+https://artifacthub.io/
 
 - look for Artifact Hub for charts
 
@@ -441,3 +443,92 @@ Kubernetes yaml manifests implemented as go templates, allows dynamic use of con
 
 > helm install  my-wordpress bitnami/wordpress -f values.yaml
 > helm status my-wordpress
+
+## Demo installing elastic search
+> helm repo add elastic https://helm.elastic.co
+
+## Install elastic - config default values in repo
+> helm install my-elasticsearch elastic/elasticsearch --version 7.12.0
+>kubectl  get deployments
+>kubectl get statefulsets
+>kubectl get pods 
+>kubectl get services
+>kubectl get pv //persisten disks
+
+> helm status my-elasticsearch
+> helm test my-elasticsearch
+
+## Changing replicaset:
+relase name is: my-elasticsearch
+>helm upgrade --set replicas=2 my-elasticsearch elastic/elasticsearch
+Revision should be 2. 
+
+>helm list
+>helm delete my-elasticsearch
+> kubectl get pods
+>kubectl get pvc //pesisten volumes claims
+> kubectl delete pvc <pvc name>
+
+## Install with custom params
+> helm install my-elasticsearch elastic/elasticsearch --version 7.12.0 -f values.yaml
+> kubectl get pods --namespace=default -l app=elasticsearch-master -w
+> kubectl get pv //this should show modifid persistent disk size eg. 50gi
+
+## Useful helm command
+> helm get manifest my-elasticsearch
+
+
+
+# StatefulSets
+Stateful set maintains identity for each deployed pod
+manages pods based on a container spec, much like a Deployment.
+When pod is rescheduled identity persists,
+Guaratees the ordering and uniquensess of Pods
+
+Stable network identity and persistent storage.
+ordered graceful deployments scaling and updates.
+
+StatefulSet is workload object but inside U define logical network name via service element. eg. service: pgsql
+So each logical stateful node will get network name
+
+When pods are created logical names are assigned.
+GKE provides store volume for statefull set which is claimed by pgsql pods
+Each new pod will get its own persistent volume.
+When pod is deleted persisten volume is not and has to be removed manually.
+
+## Pod management policies
+- ordered Pod  management is default
+- parallel Pod management is an option
+
+
+## Update strategies
+- Rolling updates delete and recreate Pods in descending order
+- The scheduler waits for a Pod to be running and ready before proceeding
+- updates can also be partitioned
+
+# Finite tasks and init containers
+
+# Jobs and CronJobs
+- workload object that represents a finite task ana manages it to completion\
+- non-parallel job sarts one pod and is complete when the pod terminates successfully
+
+# Init Containers
+- part fo the container array in a pod spec
+- execute before app or other containers in a pod
+- Init containers run in order and to completion, like logical sequence of events
+This way U can separate startup code from application image.
+
+
+Example bash loop:
+
+sh -c
+```
+until nslookup mysql; do echo waiting for mysql; sleep 2; done;
+```
+
+# Tricks - Query DNS using container
+Outpu: Record A
+
+```
+kubectl run dig --image=tutum/dnsutils --restar=Never --rm=true --tty --stdin --command -- dig <hostname>
+``
