@@ -21,8 +21,8 @@ gcloud compute instances list
 gcloud init
 
 gcloud config configurations activate alle-dev
-gcloud config configurations create
-gcloud info --format="get(config.paths.active_config_path)"
+gcloud info --format="get(config.paths.active_config_p
+gcloud config configurations createath)"
 
 gcloud config list
 gcloud config set
@@ -44,7 +44,11 @@ gcloud config configurations activate alle-devs
 gcloud auth login
 gcloud config set project sc-15334-consul-dev
 
-
+glist
+gcloud compute ssh <instancename>  --internal-ip --zone=ZONE
+gcloud beta compute ssh --zone "europe-west1-b" "discovery-0wkb"  --internal-ip --project "sc-15334-consul-dev"
+gcloud beta compute ssh --zone "europe-west1-b"   --internal-ip --project "sc-15334-consul-dev" <instance-name>
+gcloud compute ssh --zone "europe-west1-b"   --internal-ip --project "sc-15334-consul-dev" <instance-name>
 
 gcloud compute ssh INTERNAL_INSTANCE_NAME \
     --zone=ZONE \
